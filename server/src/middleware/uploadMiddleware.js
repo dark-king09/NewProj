@@ -2,11 +2,14 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import multer from "multer";
+import { env } from "../config/env.js";
 import { ApiError } from "../utils/ApiError.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const uploadDirectory = path.resolve(__dirname, "../../uploads");
+const uploadDirectory = env.uploadDir
+  ? path.resolve(env.uploadDir)
+  : path.resolve(__dirname, "../../uploads");
 
 if (!fs.existsSync(uploadDirectory)) {
   fs.mkdirSync(uploadDirectory, { recursive: true });

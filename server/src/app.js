@@ -51,6 +51,22 @@ const authLimiter = rateLimit({
   legacyHeaders: false
 });
 
+app.get("/", (_req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Rural Education and Skill Development Platform API v1.0",
+    apiRoot: "/api",
+    endpoints: {
+      health: "/api/health",
+      public: ["/api/content", "/api/programs", "/api/stories", "/api/resources", "/api/contact"],
+      auth: ["/api/auth/login"],
+      admin: ["/api/admin/dashboard", "/api/admin/programs", "/api/admin/stories", "/api/admin/resources"]
+    },
+    frontend: env.clientUrl,
+    docs: "Use frontend for full experience."
+  });
+});
+
 app.get("/api/health", (_req, res) => {
   res.status(200).json({
     success: true,
@@ -58,7 +74,10 @@ app.get("/api/health", (_req, res) => {
   });
 });
 
-app.use("/uploads", express.static(path.resolve(__dirname, "../uploads")));
+app.use(
+  "/uploads",
+  express.static(env.uploadDir ? path.resolve(env.uploadDir) : path.resolve(__dirname, "../uploads"))
+);
 app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api", publicRoutes);
 app.use("/api/admin", adminRoutes);
