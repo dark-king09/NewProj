@@ -22,7 +22,6 @@ export const env = {
     .filter(Boolean),
   jwtSecret: process.env.JWT_SECRET || "",
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || "7d",
-  uploadDir: process.env.UPLOAD_DIR || "",
   adminSeedName: process.env.ADMIN_SEED_NAME || "Platform Admin",
   adminSeedEmail: process.env.ADMIN_SEED_EMAIL || "",
   adminSeedPassword: process.env.ADMIN_SEED_PASSWORD || ""

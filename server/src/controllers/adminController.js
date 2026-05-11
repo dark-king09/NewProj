@@ -3,6 +3,7 @@ import { ContactMessage } from "../models/ContactMessage.js";
 import { Program } from "../models/Program.js";
 import { Resource } from "../models/Resource.js";
 import { Story } from "../models/Story.js";
+import { saveUploadedFile } from "../services/uploadStorage.js";
 import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
@@ -73,12 +74,14 @@ export const uploadAsset = asyncHandler(async (req, res) => {
     throw new ApiError(400, "No file uploaded.");
   }
 
+  const storedFile = await saveUploadedFile(req.file);
+
   res.status(201).json({
     success: true,
     message: "Asset uploaded successfully.",
     data: {
-      fileName: req.file.filename,
-      url: `/uploads/${req.file.filename}`
+      fileName: storedFile.filename,
+      url: `/uploads/${storedFile.filename}`
     }
   });
 });

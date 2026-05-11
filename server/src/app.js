@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 import authRoutes from "./routes/authRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import publicRoutes from "./routes/publicRoutes.js";
+import { serveUploadedAsset } from "./controllers/uploadController.js";
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 import { env } from "./config/env.js";
 
@@ -74,10 +75,8 @@ app.get("/api/health", (_req, res) => {
   });
 });
 
-app.use(
-  "/uploads",
-  express.static(env.uploadDir ? path.resolve(env.uploadDir) : path.resolve(__dirname, "../uploads"))
-);
+app.get("/uploads/:filename", serveUploadedAsset);
+app.use("/uploads", express.static(path.resolve(__dirname, "../uploads")));
 app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api", publicRoutes);
 app.use("/api/admin", adminRoutes);
